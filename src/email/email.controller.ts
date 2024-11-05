@@ -10,6 +10,7 @@ import {
 import { EmailService } from './email.service';
 import { CreateEmailDto } from './dto/create-email.dto';
 import { UpdateEmailDto } from './dto/update-email.dto';
+import { User } from './entities/email.entity';
 
 @Controller('email')
 export class EmailController {
@@ -18,6 +19,13 @@ export class EmailController {
   @Post()
   create(@Body() createEmailDto: CreateEmailDto) {
     return this.emailService.create(createEmailDto);
+  }
+
+  @Post('test-mail')
+  async testMail(@Body() user: User) {
+    const token = Math.floor(1000 + Math.random() * 9000).toString();
+    await this.emailService.sendUserConfirmation(user, token);
+    return this.emailService.findAll();
   }
 
   @Get()
